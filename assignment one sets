@@ -1,0 +1,130 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+ 
+int main()
+{
+    vector<string> universal;
+    string r ;
+    cout<<" enter the universal set "<<"{ \n" ;
+    while(r !="}"){
+        cin>>r;
+        universal.push_back(r);
+    }
+    sort(universal.begin(),universal.end());
+    universal.erase(unique(universal.begin(),universal.end()),universal.end());
+    cout<<" enter the number of subsets \n" ;
+    int n ;
+    cin>>n ;
+    int check[n][universal.size()] ;
+    string w ;
+    int j , m ;
+    for(int i = 0 ;  i<n; i++){
+            for(int k = 0 ; k<universal.size();k++){
+                check[i][k] = 0 ;
+            }
+    }
+    for(int i = 0 ;  i<n; i++){
+             m=0;
+             cout<<"enter the "<<i+1<<" set {\n";
+        do{
+             cin>>w;
+             j = find(universal.begin(),universal.end(),w) - universal.begin();
+             if(j>=universal.size()){
+                cout<<"this element is not in universal !! \n " ;
+             }else{
+             check[i][j]= 1 ;
+               m++ ;
+             }
+        }while(w!="}"&&m<universal.size());
+        cout<<"\n" ;
+    }
+    int numQ = 0 ;
+    while(numQ != 4 ){
+            cout<<" press 1 to get the union of two sets\n" ;
+            cout<<" press 2 to get the intersect of two sets\n" ;
+            cout<<" press 3 to get the complement of a set \n" ;
+            cout<<" press 4 to exit\n" ;
+            cin>>numQ ;
+            if(numQ == 1){
+                    int fSet , secSet ;
+                cout<<"enter the number of the first set " ;
+                do{
+                   cin>>fSet ;
+                }while(fSet<=0&&fSet>n);
+                fSet-- ;
+                cout<<"enter the number of second set " ;
+                do{
+                   cin>>secSet ;
+                }while(secSet<=0&&secSet>n);
+                secSet-- ;
+                cout<<"the union of two sets is "<<"{";
+                bool temp = true ;
+                for(int i =0 ; i<universal.size() ; i++){
+                    if (check[fSet][i] | check[secSet][i] && temp)
+                {
+                    cout << universal[i];
+                    temp = false;
+                }
+                else if (check[fSet][i] | check[secSet][i])
+                {
+                    cout << " " << universal[i];
+                }
+                }
+                    cout << "\n";
+                }else if(numQ==2){
+                     int fSet , secSet ;
+                cout<<"enter the number of the first set " ;
+                do{
+                   cin>>fSet ;
+                }while(fSet<=0&&fSet>n);
+                fSet--;
+                cout<<"enter the number of the second set " ;
+                do{
+                   cin>>secSet ;
+                }while(secSet<=0&&secSet>n);
+                secSet--;
+                cout<<"the intersect of two sets is "<<"{";
+                bool temp = true ;
+                for(int i =0 ; i<universal.size() ; i++){
+                    if (check[fSet][i] && check[secSet][i] && temp)
+                {
+                    cout << universal[i];
+                    temp = false;
+                }
+                else if (check[fSet][i] && check[secSet][i])
+                {
+                    cout << " " << universal[i];
+                }
+                }
+                    cout << "\n";
+                }else if (numQ == 3)
+                {
+                    int which_set;
+                    cout << "Choose the set number: ";
+                    do
+                    {
+                            cin >> which_set;
+                    } while (which_set <= 0 && which_set > n);
+                    which_set--;
+                        cout << "The complement of the set = {";
+                    bool tem = true;
+                    for (int i = 0; i < universal.size(); i++)
+                    {
+                        if (!check[which_set][i] && tem)
+                        {
+                            cout << universal[i];
+                            tem = false;
+                        }
+                        else if (!check[which_set][i])
+                        {
+                            cout << " " << universal[i];
+                        }
+                    }
+                        cout << "}\n";
+                }
+                }
+ 
+    return 0;
+}
